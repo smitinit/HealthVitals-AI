@@ -1,8 +1,28 @@
 import React, { useState } from "react";
 import { SwitchMug } from "../../context/dataContext";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 function SymptoScan() {
-  let storedCredit = parseInt(localStorage.getItem("creditt")) === 0 ? 0 : 3;
-  const [credit, setCredit] = useState(storedCredit);
+  const { getPermission, isLoading } = useKindeAuth();
+  let isAdmin = null;
+  if (!isLoading) {
+    isAdmin = getPermission("admin-watch").isGranted;
+  }
+  const TotalCredits = null;
+
+  TotalCredits =
+    parseInt(localStorage.getItem("MainCredits_Sympto")) === 0
+      ? 0
+      : parseInt(localStorage.getItem("MainCredits_Sympto"));
+  // if (TotalCredits === 0) {
+  //   TotalCredits = 0;
+  // } else {
+  //   localStorage.setItem("MainCredits_Sympto", TotalCredits);
+  // }
+  // console.log(TotalCredits);
+
+  const [credit, setCredit] = useState(TotalCredits);
+  // console.log(credit);
+
   const { mealSwt } = SwitchMug();
   const [formData, setFormData] = useState({
     age: "",
@@ -20,7 +40,6 @@ function SymptoScan() {
   const [recommendations, setRecommendations] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     console.log(name, value);
@@ -33,18 +52,14 @@ function SymptoScan() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setCredit((prev) => {
-      if (prev === 0) {
-        return 0;
-      }
-      return prev - 1;
-    });
-    if (credit === 0) {
+    if (credit <= 0) {
       return alert(
         "Sorry, you have reached your credit limit. Please Upgrade to PRO version."
       );
+    } else {
+      setCredit(credit - 1);
+      localStorage.setItem("MainCredits_Sympto", credit - 1);
     }
-    localStorage.setItem("creditt", credit - 1);
     setError("");
     setRecommendations([]);
     setLoading(true);
@@ -65,6 +80,9 @@ function SymptoScan() {
       if (data.error) {
         setError(data.error);
       } else {
+        // cleanText = data.recommendations.replace(/[*#]/g, "");
+        console.log(data.recommendations);
+
         setRecommendations(data.recommendations);
       }
     } catch (error) {
@@ -104,26 +122,47 @@ function SymptoScan() {
   };
 
   return (
-    <div className=" mx-auto w-full">
-      <div className="flex flex-row w-full justify-between">
-        <h1 className="text-2xl font-bold mb-4 ">SymptoScan</h1>
-        <span>Your Credits Left: {credit}</span>
-        <div className="flex gap-5">
-          <button
-            onClick={handleLoad}
-            className="bg-black text-white p-2 hover:bg-slate-200 rounded"
-          >
-            Load
-          </button>
-          <button
-            onClick={handleClear}
-            className="bg-black text-white p-2 hover:bg-slate-200 rounded"
-          >
-            Clear
-          </button>
+    <div className=" mx-auto w-full ">
+      <div className="flex flex-col w-full justify-between gap-2 ">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold text-slate-700 underline">
+            SymptoScan
+          </h1>
+          <span className="text-sm lg:text-lg font-bold px-2 py-1 shadow-md rounded-lg text-red-500 border-[1px]">
+            Your Credits Left: {credit}
+          </span>
         </div>
+        <span className="text-slate-600 mt-3">
+          SymptoScan is designed to analyze your health profile and symptoms. By
+          inputting your age, gender, height, weight, previous diseases,
+          allergies, addictions, symptoms, dietary preferences, and daily
+          calorie intake range, the model can provide insights into potential
+          health conditions you may be facing. This tool offers a personalized
+          prediction based on the data you provide, helping you gain a better
+          understanding of your current health. However, for a thorough
+          evaluation, please consult a healthcare professional.
+        </span>
+        {isAdmin && (
+          <div className="flex gap-2">
+            <button
+              onClick={handleLoad}
+              className="bg-black text-white p-2 hover:bg-slate-200 rounded"
+            >
+              Load
+            </button>
+            <button
+              onClick={handleClear}
+              className="bg-black text-white p-2 hover:bg-slate-200 rounded"
+            >
+              Clear
+            </button>
+          </div>
+        )}
       </div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4 mt-4 border-t-[1px]"
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {Object.keys(formData).map((key) => (
             <div key={key} className="flex flex-col">
@@ -178,7 +217,7 @@ function SymptoScan() {
             {recommendations.length > 0 ? "Predict Again" : "Predict"}
           </button>
         )}
-        {!mealSwt && <p className="text-red-500 text-lg">Maintainence Mode</p>}
+        {/* {!mealSwt && <p className="text-red-500 text-lg">Maintainence Mode</p>} */}
         <div className="w-full flex flex-col items-center gap-5 mt-5">
           {loading ? (
             <div className="">
@@ -188,7 +227,7 @@ function SymptoScan() {
           ) : (
             recommendations && (
               <>
-                <div className="font-semibold text-red-500">
+                <div className="font-semibold text-slate-600">
                   <>{recommendations}</>
                 </div>
               </>
@@ -196,6 +235,13 @@ function SymptoScan() {
           )}
         </div>
       </form>
+      <div className="">
+        {!mealSwt && (
+          <p className="text-red-500 text-xl pb-[1rem] flex justify-center">
+            Maintainence Mode
+          </p>
+        )}
+      </div>
     </div>
   );
 }

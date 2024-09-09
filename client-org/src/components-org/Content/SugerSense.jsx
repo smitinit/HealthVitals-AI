@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { SwitchMug } from "../../context/dataContext";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 
 function Diabetes() {
+  const { getPermission, isLoading } = useKindeAuth();
+  let isAdmin = null;
+  if (!isLoading) {
+    isAdmin = getPermission("admin-watch").isGranted;
+  }
   const { diabetesSwt } = SwitchMug();
   const [formData, setFormData] = useState({
     Pregnancies: "",
@@ -57,9 +63,9 @@ function Diabetes() {
         }, 2000);
 
         if (prediction === 1) {
-          setResult("You are diabetic.");
+          setResult("You may have chances of being diabetic.");
         } else if (prediction === 0) {
-          setResult("You are not diabetic.");
+          setResult("You may not have diabetis.");
         } else {
           setResult("Error in prediction.");
         }
@@ -75,70 +81,90 @@ function Diabetes() {
 
   return (
     <div className="w-full">
-      <div className=" flex flex-col gap-10 p-5">
-        <div className=" flex justify-between">
-          <span className="text-3xl">
+      <div className=" flex flex-col gap-10 ">
+        <div className=" flex justify-between flex-col gap-3">
+          <span className="text-3xl text-slate-700 underline">
             <strong>Diabetes Prediction</strong>
           </span>
-          <div className="flex gap-5">
-            <button
-              onClick={() => {
-                setFormData({
-                  Pregnancies: "3",
-                  Glucose: "123",
-                  BloodPressure: "321",
-                  SkinThickness: "123",
-                  Insulin: "23",
-                  BMI: "213",
-                  DiabetesPedigreeFunction: "23",
-                  Age: "12",
-                });
-                setResult("");
-                setMessage("");
-              }}
-              className="bg-black text-white p-2 hover:bg-slate-200 rounded"
-            >
-              Load for positive
-            </button>
-            <button
-              onClick={() => {
-                setFormData({
-                  Pregnancies: "1",
-                  Glucose: "85",
-                  BloodPressure: "66",
-                  SkinThickness: "29",
-                  Insulin: "0",
-                  BMI: "26.6",
-                  DiabetesPedigreeFunction: "0.351",
-                  Age: "31",
-                });
-                setResult("");
-                setMessage("");
-              }}
-              className="bg-black text-white p-2 hover:bg-slate-200 rounded"
-            >
-              Load for negative
-            </button>
-            <button
-              onClick={() => {
-                setFormData({
-                  Pregnancies: "",
-                  Glucose: "",
-                  BloodPressure: "",
-                  SkinThickness: "",
-                  Insulin: "",
-                  BMI: "",
-                  DiabetesPedigreeFunction: "",
-                  Age: "",
-                });
-                setResult("");
-                setMessage("");
-              }}
-              className="bg-black text-white p-2 hover:bg-slate-200 rounded"
-            >
-              Clear
-            </button>
-          </div>
+          <span className="text-slate-600">
+            Our diabetes prediction model allows you to input key health metrics
+            such as age, BMI, blood pressure, glucose levels, and more. Based on
+            this information, our advanced machine learning model will analyze
+            your data and provide a prediction regarding your likelihood of
+            developing diabetes. This tool is designed to give you insights to
+            better understand your health risks and take proactive measures.
+            Please note that the results are for informational purposes and
+            should not replace professional medical advice.
+          </span>
+          <p className="text-slate-600 mt-3 font-medium ">
+            <span className="font-bold underline">
+              Reports Needed for input fields:
+            </span>{" "}
+            Blood Test , Vital Signs and Basic Health Screening , Body
+            composition and Insulin Resistance Test , Generic and Risk
+            Assessment Tools.
+          </p>
+          {isAdmin && (
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setFormData({
+                    Pregnancies: "3",
+                    Glucose: "123",
+                    BloodPressure: "321",
+                    SkinThickness: "123",
+                    Insulin: "23",
+                    BMI: "213",
+                    DiabetesPedigreeFunction: "23",
+                    Age: "12",
+                  });
+                  setResult("");
+                  setMessage("");
+                }}
+                className="bg-black text-white p-2 hover:bg-slate-200 rounded"
+              >
+                positive
+              </button>
+              <button
+                onClick={() => {
+                  setFormData({
+                    Pregnancies: "1",
+                    Glucose: "85",
+                    BloodPressure: "66",
+                    SkinThickness: "29",
+                    Insulin: "0",
+                    BMI: "26.6",
+                    DiabetesPedigreeFunction: "0.351",
+                    Age: "31",
+                  });
+                  setResult("");
+                  setMessage("");
+                }}
+                className="bg-black text-white p-2 hover:bg-slate-200 rounded"
+              >
+                negative
+              </button>
+              <button
+                onClick={() => {
+                  setFormData({
+                    Pregnancies: "",
+                    Glucose: "",
+                    BloodPressure: "",
+                    SkinThickness: "",
+                    Insulin: "",
+                    BMI: "",
+                    DiabetesPedigreeFunction: "",
+                    Age: "",
+                  });
+                  setResult("");
+                  setMessage("");
+                }}
+                className="bg-black text-white p-2 hover:bg-slate-200 rounded"
+              >
+                Clear
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -193,8 +219,10 @@ function Diabetes() {
           )
         )}
         {!loading && result && (
-          <div className="output-message">
-            <p>{result}</p>
+          <div className="text-center mt-4 lg:mt-8 border-t-[1px] pt-5 ">
+            <span className="text-xl rounded-lg  font-bold text-slate-700 shadow-lg border-[1px] p-2 ">
+              {result}
+            </span>
           </div>
         )}
       </div>

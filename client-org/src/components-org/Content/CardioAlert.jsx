@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { SwitchMug } from "../../context/dataContext";
 import AlertDialogSlide from "../Dialogg";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
+
 function Heart_atk() {
+  const { getPermission, isLoading } = useKindeAuth();
+  let isAdmin = null;
+  if (!isLoading) {
+    isAdmin = getPermission("admin-watch").isGranted;
+  }
   const [formData, setFormData] = useState({
     Sex: null,
     Age: null,
@@ -68,7 +75,7 @@ function Heart_atk() {
   };
   const { heartSwt } = SwitchMug();
   const [target, setTarget] = useState(null);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoadingg, setLoading] = useState(false);
   const [err, setErr] = useState("");
 
   const handleChange = (e) => {
@@ -103,86 +110,110 @@ function Heart_atk() {
   };
 
   return (
-    <div className="mx-auto p-4 w-full">
-      <div className="flex flex-col lg:flex-row justify-between ">
-        <p className="text-3xl font-bold text-slate-700">
-          Heart Disease Prediction.
-        </p>
-
-        <div className="flex gap-1 lg:gap-3 h-fit">
-          <button
-            type="button"
-            onClick={() =>
-              setFormData({
-                Sex: "1",
-                Age: "63",
-                cp: "3",
-                trestbps: "145",
-                Cholesterol: "233",
-                fbs: "1",
-                Restecg: "0",
-                Thalach: "150",
-                exang: "0",
-                oldpeak: "2.3",
-                Slope: "0",
-                ca: "0",
-                thal: "1",
-              })
-            }
-            className="mt-5 bg-zinc-900 text-white sm:text-sm px-3 py-2 rounded hover:bg-slate-500 h-fit"
-          >
-            Load for positive
-          </button>
-          <button
-            type="button"
-            onClick={() =>
-              setFormData({
-                Sex: "1",
-                Age: "67",
-                cp: "0",
-                trestbps: "120",
-                Cholesterol: "229",
-                fbs: "0",
-                Restecg: "0",
-                Thalach: "129",
-                exang: "1",
-                oldpeak: "2.6",
-                Slope: "1",
-                ca: "2",
-                thal: "3",
-              })
-            }
-            className="mt-5 bg-zinc-900 text-white px-3 py-2 rounded hover:bg-slate-500 h-fit"
-          >
-            Load for negative
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setFormData({
-                Sex: "",
-                Age: "",
-                cp: "",
-                trestbps: "",
-                Cholesterol: "",
-                fbs: "",
-                Restecg: "",
-                Thalach: "",
-                exang: "",
-                oldpeak: "",
-                Slope: "",
-                ca: "",
-                thal: "",
-              });
-              setTarget(null);
-            }}
-            className="mt-5 bg-zinc-900 text-white px-3 py-2 rounded hover:bg-slate-500 h-fit"
-          >
-            {target ? "Reset" : "Clear"}
-          </button>
+    <div className="mx-auto  w-full flex-col flex">
+      <div className="flex flex-col justify-between lg:gap-5 ">
+        <div>
+          <p className="text-3xl font-bold text-slate-700 underline">
+            Cardio Alert
+          </p>
+          {isAdmin && (
+            <div className="flex gap-1 lg:gap-3 h-fit w-fit items-center ">
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData({
+                    Sex: "1",
+                    Age: "63",
+                    cp: "3",
+                    trestbps: "145",
+                    Cholesterol: "233",
+                    fbs: "1",
+                    Restecg: "0",
+                    Thalach: "150",
+                    exang: "0",
+                    oldpeak: "2.3",
+                    Slope: "0",
+                    ca: "0",
+                    thal: "1",
+                  })
+                }
+                className="mt-5 bg-zinc-900 text-white sm:text-sm px-3 py-2 rounded hover:bg-slate-500 h-fit"
+              >
+                positive
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData({
+                    Sex: "1",
+                    Age: "67",
+                    cp: "0",
+                    trestbps: "120",
+                    Cholesterol: "229",
+                    fbs: "0",
+                    Restecg: "0",
+                    Thalach: "129",
+                    exang: "1",
+                    oldpeak: "2.6",
+                    Slope: "1",
+                    ca: "2",
+                    thal: "3",
+                  })
+                }
+                className="mt-5 bg-zinc-900 text-white px-3 py-2 rounded hover:bg-slate-500 h-fit"
+              >
+                negative
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData({
+                    Sex: "",
+                    Age: "",
+                    cp: "",
+                    trestbps: "",
+                    Cholesterol: "",
+                    fbs: "",
+                    Restecg: "",
+                    Thalach: "",
+                    exang: "",
+                    oldpeak: "",
+                    Slope: "",
+                    ca: "",
+                    thal: "",
+                  });
+                  setTarget(null);
+                }}
+                className="mt-5 bg-zinc-900 text-white px-3 py-2 rounded hover:bg-slate-500 h-fit"
+              >
+                {target ? "Reset" : "Clear"}
+              </button>
+            </div>
+          )}
         </div>
+
+        <p className="text-slate-600 mt-3">
+          <strong>CardioAlert:</strong> Your personal heart health assistant.
+          Simply enter your details, and CardioAlert will analyze the
+          information to provide you with tailored insights and recommendations.
+          Stay informed and take control of your cardiovascular well-being with
+          ease.
+        </p>
+        <p className="text-slate-600 mt-3 font-medium ">
+          <span className="font-bold underline">
+            Reports Needed for input fields:{" "}
+          </span>
+          Electrocardiogram (ECG) or Stress Test Report , Blood Test , Coronary
+          Angiography and Imaging, Basic Health Screening Components.
+        </p>
       </div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4  w-full">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4  w-full mt-5 border-t-[1px]"
+      >
+        <span className="text-slate-600 text-sm">
+          Click on the field names for detailed info:
+        </span>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {Object.keys(formData).map((key) => (
             <div key={key} className="flex flex-col">
@@ -291,7 +322,7 @@ function Heart_atk() {
             </div>
           ))}
         </div>
-        {err && <div className="text-red-600">{err}</div>}
+        {/* {err && <div className="text-red-600">{err}</div>} */}
         {heartSwt && (
           <button
             type="submit"
@@ -300,10 +331,10 @@ function Heart_atk() {
             {!target === null ? "Predict Again" : "Predict"}
           </button>
         )}
-        {!heartSwt && <p className="text-red-500 text-lg">Maintainence Mode</p>}
+        {/* {!heartSwt && <p className="text-red-500 text-lg">Maintainence Mode</p>} */}
 
         <div className="mt-7">
-          {isLoading && target === null && !err ? (
+          {isLoadingg && target === null && !err ? (
             <p>loading</p>
           ) : (
             <>
@@ -327,6 +358,14 @@ function Heart_atk() {
           )}
         </div>
       </form>
+      <div className="">
+        {!heartSwt && (
+          <p className="text-red-500 text-xl mb-[1.5rem]  flex justify-center">
+            Maintainence Mode
+          </p>
+        )}
+      </div>
+      {err && <p className="text-red-500 ">{err}</p>}
     </div>
   );
 }

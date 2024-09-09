@@ -21,9 +21,9 @@ const AlertDialogSlide = ({ info, buttonText, content }) => {
     <React.Fragment>
       {/* <Button variant="outlined" onClick={handleClickOpen}>
       </Button> */}
-      <Button type="button" onClick={handleClickOpen}>
-        {buttonText}
-      </Button>
+      <button type="button" onClick={handleClickOpen}>
+        {buttonText}:
+      </button>
       <Dialog
         open={open}
         keepMounted

@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 import "./navlink-active.css";
 const RootLayout = () => {
   return (
-    <div className="w-full h-screen flex flex-col">
+    <div className="w-full h-[100vh] flex flex-col overflow-hidden">
       <Navbar />
       <div className=" h-full">
         <Outlet />

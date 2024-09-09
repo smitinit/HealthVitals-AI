@@ -3,7 +3,6 @@ import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 import { faQ } from "../../Data/faQ";
 import bg_video1 from "../../assets/Videos/video1.mp4";
 import bg_image1 from "../../assets/Images/heart.jpg";
-import bg_image2 from "../../assets/Images/calory.jpg";
 import bg_image3 from "../../assets/Images/cardio.jpg";
 import bg_image4 from "../../assets/Images/diabetes.jpg";
 import bg_image5 from "../../assets/Images/caltrack.jpg";
@@ -51,18 +50,20 @@ function Home() {
                   alt="ss"
                   className="w-full h-full absolute -z-10 rounded-xl "
                 />
-                <span className="mt-28 text-black">SymptoScan</span>
               </div>
+              <span className="flex justify-center text-black">
+                CardioAlert
+              </span>
             </NavLink>
             <NavLink to="/contents/sidebar/symptoms">
-              <div className="w-[10rem] h-[10rem] bg-slate-50 rounded-xl flex justify-center items-center relative object-cover text-white -z-40  ">
+              <div className="w-[10rem] h-[10rem] hover:bg-slate-600 bg-slate-50 rounded-xl flex justify-center items-center relative object-cover -z-50  ">
                 <img
                   src={bg_image3}
                   alt="ss"
                   className="w-full h-full absolute -z-10 rounded-xl  "
                 />
-                <span className="mt-28">SymptoScan</span>
               </div>
+              <span className="flex justify-center text-black">SymptoScan</span>
             </NavLink>
             <NavLink to="/contents/sidebar/cardio">
               <div className="w-[10rem] h-[10rem] text-white bg-slate-50 rounded-xl flex justify-center items-center relative object-cover -z-40">
@@ -71,8 +72,8 @@ function Home() {
                   alt="ss"
                   className="w-full h-full absolute -z-10 rounded-xl  "
                 />
-                <span className="mt-28">CardioAlert</span>
               </div>
+              <span className="flex justify-center">CardioAlert</span>
             </NavLink>
             <NavLink to="/contents/sidebar/suger">
               <div className="w-[10rem] h-[10rem] text-white bg-slate-50 rounded-xl flex justify-center items-center relative object-cover -z-40">
@@ -82,6 +83,7 @@ function Home() {
                   className="w-full h-full absolute -z-10 rounded-xl  "
                 />
               </div>
+              <span className="flex justify-center">SugerAlert</span>
             </NavLink>
             <NavLink to="/contents/sidebar/parkinsons">
               <div className="w-[10rem] h-[10rem] text-white bg-slate-50 rounded-xl flex justify-center items-center relative object-cover -z-40">
@@ -91,6 +93,7 @@ function Home() {
                   className="w-full h-full absolute -z-10 rounded-xl  "
                 />
               </div>
+              <span className="flex justify-center">Parkinsons</span>
             </NavLink>
             <NavLink to="/contents/sidebar/mentalwell">
               <div className="w-[10rem] h-[10rem] text-white bg-slate-50 rounded-xl flex justify-center items-center relative object-cover -z-40">
@@ -100,6 +103,7 @@ function Home() {
                   className="w-full h-full absolute -z-10 rounded-xl  "
                 />
               </div>
+              <span className="flex justify-center">MentalWell</span>
             </NavLink>
           </div>
         </section>

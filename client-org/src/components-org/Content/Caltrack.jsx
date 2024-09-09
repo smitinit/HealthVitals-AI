@@ -11,7 +11,7 @@ function Caltrack() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { calorySwt } = SwitchMug();
-  let storedCredit = parseInt(localStorage.getItem("credit")) === 0 ? 0 : 3;
+  let storedCredit = parseInt(localStorage.getItem("credit")) === 0 ? 0 : 5;
   const [credit, setCredit] = useState(storedCredit);
 
   const [openQuickMeasures, setOpenQuickMeasures] = useState(false);
@@ -95,16 +95,20 @@ function Caltrack() {
   };
 
   return (
-    <div className="flex w-full flex-col  gap-7">
+    <div className="flex w-full flex-col gap-7 ">
       <div className="flex flex-col lg:flex-row border-b border-b-slate-400 ">
         <div className="lg:w-[45rem] w-full p-4 mb-3 text-xl text-gray-950 ">
-          To use our<strong> Calorie Analysis & Counter</strong>, simply upload
-          a clear image of your meal. Our advanced image recognition technology
-          will analyze the food items and provide an estimated calorie count.
-          <br /> <br />
-          <span className="text-gray-500 text-lg underline">
-            For best results, ensure the image is well-lit and focuses on the
-            food. And approximation of 100gm per item, is used by model.
+          To use our<strong> Caltrack360 (Calorie Analysis & Counter)</strong>,
+          simply upload a clear image of your meal. Our advanced image
+          recognition technology will analyze the food items and provide an
+          estimated calorie count.
+          <br />
+          <span className="font-medium text-lg ">
+            <span className="underline">
+              For best results, ensure the image is well-lit and focuses on the
+              food. And approximation of 100gm per item, is used
+            </span>
+            (within model).
             <br />
             <div>
               Lets Quickly check your minimun Calory requirement:{" "}
@@ -116,11 +120,13 @@ function Caltrack() {
               </button>
             </div>
           </span>
-          <span>Your Credits Left: {credit}</span>
-          {/* <AlertDialogSlide /> */}
+          <br />
+          <span className="text-sm lg:text-lg font-bold px-2 py-1 shadow-md rounded-lg text-red-500 border-[1px]">
+            Your Credits Left: {credit}
+          </span>
         </div>
         {openQuickMeasures && (
-          <div className="flex flex-col  h-[25rem] w-[25rem] lg:top-1/3 lg:right-1/3 top-1/2 bg-slate-400 z-10 absolute  p-2 justify-between rounded-xl shadow-2xl">
+          <div className="flex flex-col lg:w-[25rem] h-fit w-[90%] lg:top-1/3 lg:right-1/3 top-1/3 bg-slate-400 z-10 absolute  p-2 justify-between rounded-xl shadow-2xl">
             <div className="flex flex-col gap-3">
               <div className="flex justify-between">
                 <p className="text-slate-100">
@@ -210,7 +216,7 @@ function Caltrack() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="flex w-full flex-col">
+        <form onSubmit={handleSubmit} className="flex w-full flex-col h-full ">
           <div className="flex flex-col gap-4 w-full justify-center items-center">
             <div className="flex gap-6 items-center justify-center lg:w-[25rem] w-full">
               <label

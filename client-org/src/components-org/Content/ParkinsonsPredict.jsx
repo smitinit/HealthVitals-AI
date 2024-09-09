@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { SwitchMug } from "../../context/dataContext";
 import AlertDialogSlide from "../Dialogg";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 function ParkinsonsPredict() {
+  const { getPermission, isLoading } = useKindeAuth();
+  let isAdmin = null;
+  if (!isLoading) {
+    isAdmin = getPermission("admin-watch").isGranted;
+  }
   const { parkinsonsSwt } = SwitchMug();
   const [formData, setFormData] = useState({
     "MDVP:Fo(Hz)": "",
@@ -56,11 +62,11 @@ function ParkinsonsPredict() {
 
         if (prediction === 1) {
           setMessage(
-            "You are unhealthy as you are affected by Parkinson's Disease."
+            "You are unhealthy as you may get affected by Parkinson's Disease."
           );
         } else {
           setMessage(
-            "You are healthy and not affected by Parkinson's Disease."
+            "You are healthy and may not be affected by Parkinson's Disease."
           );
         }
       } else {
@@ -116,11 +122,16 @@ function ParkinsonsPredict() {
   };
 
   return (
-    <div div className="flex flex-col gap-10 w-full">
-      <div className=" flex flex-col gap-10 p-5 w-full">
+    <div div className="flex flex-col gap-10 w-full ">
+      {/* <div className=" flex flex-col gap-10 p-5 w-full">
         <div className=" flex justify-between">
           <span className="text-3xl">
             <strong>Parkinson's Disease Prediction</strong>
+          </span>
+          <span>
+            Frequency-Related Measures, Jitter Measures (Frequency Variability),
+            Shimmer Measures (Amplitude Variability) , Noise-Related Measures ,
+            Dynamic and Nonlinear Measures [TEST REPORTS]
           </span>
           <div className="flex gap-5">
             <button
@@ -171,9 +182,113 @@ function ParkinsonsPredict() {
             </button>
           </div>
         </div>
+      </div> */}
+      <div className="flex flex-col  justify-between lg:gap-5 gap-3 ">
+        <div className="flex flex-col ">
+          <p className="text-3xl font-bold text-slate-700 underline">
+            Parkinson's Disease Prediction
+          </p>
+          {isAdmin && (
+            <div className="flex gap-1 lg:gap-3 h-fit w-fit items-center ">
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData({
+                    "MDVP:Fo(Hz)": "119.992",
+                    "MDVP:Fhi(Hz)": "157.302",
+                    "MDVP:Flo(Hz)": "74.997",
+                    "MDVP:Jitter(%)": "0.00784",
+                    "MDVP:Jitter(Abs)": "0.00007",
+                    "MDVP:RAP": "0.00370",
+                    "MDVP:PPQ": "0.00554",
+                    "Jitter:DDP": "0.01109",
+                    "MDVP:Shimmer(dB)": "0.426",
+                    "Shimmer:APQ5": "0.03130",
+                    NHR: "0.02211",
+                    HNR: "21.033",
+                    RPDE: "0.414783",
+                    DFA: "0.815285",
+                  })
+                }
+                className="mt-5 bg-zinc-900 text-white sm:text-sm px-3 py-2 rounded hover:bg-slate-500 h-fit"
+              >
+                positive
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData({
+                    "MDVP:Fo(Hz)": "197.076",
+                    "MDVP:Fhi(Hz)": "206.896",
+                    "MDVP:Flo(Hz)": "192.055",
+                    "MDVP:Jitter(%)": "0.00289",
+                    "MDVP:Jitter(Abs)": "0.00001",
+                    "MDVP:RAP": "0.00166",
+                    "MDVP:PPQ": "0.00168",
+                    "Jitter:DDP": "0.00498",
+                    "MDVP:Shimmer(dB)": "0.097",
+                    "Shimmer:APQ5": "0.0068",
+                    NHR: "0.00339",
+                    HNR: "26.775",
+                    RPDE: "0.422229",
+                    DFA: "0.741367",
+                  })
+                }
+                className="mt-5 bg-zinc-900 text-white px-3 py-2 rounded hover:bg-slate-500 h-fit"
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setFormData({
+                    "MDVP:Fo(Hz)": "197.076",
+                    "MDVP:Fhi(Hz)": "206.896",
+                    "MDVP:Flo(Hz)": "192.055",
+                    "MDVP:Jitter(%)": "0.00289",
+                    "MDVP:Jitter(Abs)": "0.00001",
+                    "MDVP:RAP": "0.00166",
+                    "MDVP:PPQ": "0.00168",
+                    "Jitter:DDP": "0.00498",
+                    "MDVP:Shimmer(dB)": "0.097",
+                    "Shimmer:APQ5": "0.0068",
+                    NHR: "0.00339",
+                    HNR: "26.775",
+                    RPDE: "0.422229",
+                    DFA: "0.741367",
+                  });
+                  setTarget(null);
+                }}
+                className="mt-5 bg-zinc-900 text-white px-3 py-2 rounded hover:bg-slate-500 h-fit"
+              >
+                negative
+              </button>
+            </div>
+          )}
+        </div>
+
+        <p className="text-slate-600 ">
+          Our aim is to assist you in understanding and identifying potential
+          signs of Parkinson's disease through your input. By sharing your
+          experiences and observations, we can provide insights and
+          recommendations that may help in early detection and management.
+          Please provide as much detail as you can, and together, we'll work
+          towards a clearer understanding of your health and well-being.
+        </p>
+        <p className="text-slate-600 font-medium">
+          <span className="font-bold underline">
+            Reports Needed for input fields:
+          </span>{" "}
+          Frequency-Related Measures, Jitter Measures (Frequency Variability),
+          Shimmer Measures (Amplitude Variability) , Noise-Related Measures ,
+          Dynamic and Nonlinear Measures
+        </p>
       </div>
       <div className=" mx-auto p-4 w-full">
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
+          <span className="border-t-[1px] text-sm">
+            Click on the field names for detailed info:
+          </span>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {Object.keys(formData).map((key) => (
               <div key={key} className="flex flex-col">
@@ -214,19 +329,27 @@ function ParkinsonsPredict() {
             </div>
           )}
         </form>
-        {!parkinsonsSwt && (
+        {/* {!parkinsonsSwt && (
           <p className="text-red-500 text-lg">Maintainence Mode</p>
-        )}
+        )} */}
 
         {loading ? (
           <div className="">Loading..</div>
         ) : (
           message && (
-            <div className="font-semibold">
+            <div className="font-semibold mt-3 shadow-md border-[1px] rounded-md p-2">
               <p>{message}</p>
             </div>
           )
         )}
+        <div className="">
+          {!parkinsonsSwt && (
+            <p className="text-red-500 text-xl mt-[1.5rem]  flex justify-center">
+              Maintainence Mode
+            </p>
+          )}
+        </div>
+        {/* {err && <p className="text-red-500 ">{err}</p>} */}
       </div>
     </div>
   );

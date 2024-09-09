@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { SwitchMug } from "../../context/dataContext";
+import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
+
 function MentalSuggestions() {
+  const { getPermission, isLoading } = useKindeAuth();
+  let isAdmin = null;
+  if (!isLoading) {
+    isAdmin = getPermission("admin-watch").isGranted;
+  }
   const [formData, setFormData] = useState({
     Age: "",
     MaritalStatus: "",
@@ -25,7 +32,7 @@ function MentalSuggestions() {
   const [stressLevel, setStressLevel] = useState("");
   const [psychiatristMessage, setPsychiatristMessage] = useState("");
   const [err, setErr] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingg, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -112,29 +119,47 @@ function MentalSuggestions() {
   };
 
   return (
-    <div className=" mx-auto w-full">
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-bold mb-4">Mental Health Suggestions</h1>
-        <div className="flex gap-5">
-          <button
-            onClick={() => {
-              handleLoad();
-            }}
-            className="bg-black text-white p-2 hover:bg-slate-200 rounded"
-          >
-            Load for positive
-          </button>
-
-          <button
-            onClick={() => handleClear()}
-            className="bg-black text-white p-2 hover:bg-slate-200 rounded"
-          >
-            Clear
-          </button>
+    <div className=" mx-auto w-full flex-col flex">
+      <div className="flex flex-col  ">
+        <div className="flex flex-col ">
+          <span className="text-3xl font-bold lg:mb-4 mb-2 underline text-slate-700">
+            Mental Health Suggestions
+          </span>
+          {isAdmin && (
+            <div className="flex gap-2 w-fit items-center">
+              <button
+                onClick={() => {
+                  handleLoad();
+                }}
+                className="bg-black text-white p-2 hover:bg-slate-200 rounded"
+              >
+                positive
+              </button>
+              <button
+                onClick={() => handleClear()}
+                className="bg-black text-white p-2 hover:bg-slate-200 rounded"
+              >
+                Clear
+              </button>
+            </div>
+          )}
+        </div>
+        <div className="lg:mt-0 mt-4 text-slate-600">
+          We're here to help you navigate your mental well-being by offering
+          personalized advice based on your inputs. Whether you're seeking
+          coping strategies, relaxation techniques, or ways to improve your
+          overall mental health, we're here to provide support and guidance
+          tailored to your needs.
+          <br />
+          "Take a moment to fill the below listed fields, and let's work
+          together towards a healthier, happier you."
         </div>
       </div>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4 lg:mt0 mt-4 border-t-[1px] "
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:mt-0 mt-3">
           {Object.keys(formData).map((key) => (
             <div key={key} className="flex flex-col">
               <label
@@ -283,7 +308,7 @@ function MentalSuggestions() {
             </div>
           ))}
         </div>
-        {mentalSwt && !isLoading && (
+        {mentalSwt && !isLoadingg && (
           <button
             type="submit"
             className="bg-black text-white p-2 hover:bg-slate-200 rounded w-fit"
@@ -291,46 +316,63 @@ function MentalSuggestions() {
             {suggestions.length > 0 ? "Predict Again" : "Predict"}
           </button>
         )}
-        <div className="w-full flex flex-col items-center gap-5 mt-5">
-          {suggestions.length > 0 && (
-            <div className="w-full p-5 border-[1px] border-slate-300">
-              <label className="block mb-2 text-sm font-medium text-gray-900">
-                Suggestions:
-              </label>
-              <ul className="list-disc">
-                {suggestions.map((suggestion, index) => (
-                  <li key={index}>
-                    {suggestion}
-                    <br />
-                  </li>
-                ))}
-              </ul>
+        {suggestions.length > 0 && (
+          <div className=" border-[1px] shadow-2xl rounded-lg">
+            <div className="w-full flex flex-col items-center gap-5 mt-5 ">
+              {suggestions.length > 0 && (
+                <div className="w-full p-5  border-slate-300">
+                  <label className="block mb-2  font-medium text-gray-900 text-xl underline">
+                    Suggestions:
+                  </label>
+                  <ul className="list-disc p-3">
+                    {suggestions.map((suggestion, index) =>
+                      index === 0 ? (
+                        <span className="font-semibold">
+                          <li key={index}>
+                            {suggestion}
+                            <br />
+                          </li>
+                        </span>
+                      ) : (
+                        <li key={index}>
+                          {suggestion}
+                          <br />
+                        </li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </form>
-      {!mentalSwt && <p className="text-red-500 text-lg">Maintainence Mode</p>}
-      {suggestions.length > 0 && (
-        <>
-          <label className="block mb-2 text-sm font-medium text-gray-900">
-            Stress Level:
-          </label>
-          <div className="w-full p-2.5">
-            <p>{stressLevel}</p>
-          </div>
+            {suggestions.length > 0 && (
+              <div className="p-5">
+                <label className="block mb-2 text-xl font-medium text-gray-900">
+                  Stress Level:{" "}
+                  <span className="font-extrabold text-lg">{stressLevel}</span>
+                </label>
+                <label className="block mb-2 text-xl font-medium text-gray-900">
+                  Psychiatrist Message:{" "}
+                  <span className="font-normal text-lg">
+                    {psychiatristMessage}
+                  </span>
+                </label>
 
-          <label className="block mb-2 text-sm font-medium text-gray-900">
-            Psychiatrist Message:
-          </label>
-          <div className="w-full p-2.5">
-            <p>{psychiatristMessage}</p>
+                <small>
+                  For further help, you may consult your nearby Psychiatrist.
+                </small>
+              </div>
+            )}
           </div>
-          <small>
-            For further help, you may consult your nearby Psychiatrist.
-          </small>
-        </>
-      )}
-      {err && <p className="text-red-500 mt-2">{err}</p>}
+        )}
+      </form>
+      <div className="">
+        {!mentalSwt && (
+          <p className="text-red-500 text-xl my-[1.5rem]  flex justify-center">
+            Maintainence Mode
+          </p>
+        )}
+      </div>
+      {err && <p className="text-red-500 ">{err}</p>}
     </div>
   );
 }

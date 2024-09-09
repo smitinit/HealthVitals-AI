@@ -17,7 +17,7 @@ CORS(app)
 
 # ==================================== MongoDB Setup ====================================
 
-# client = MongoClient('mongodb+srv://patelsmit090305:smit090305@healthvitals-ai-clustor.7dlb7.mongodb.net/?retryWrites=true&w=majority&appName=HealthVitals-AI-CLUSTOR')
+client = MongoClient('mongodb+srv://patelsmit090305:smit090305@healthvitals-ai-clustor.7dlb7.mongodb.net/?retryWrites=true&w=majority&appName=HealthVitals-AI-CLUSTOR')
 client = MongoClient(os.getenv("MONGO_DB_URL"))
 db = client['adminPanel']  #
 collection = db['switchStates']  
@@ -153,13 +153,14 @@ def get_nutrition_data():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-# ==================================== Calorie Counter Setup ====================================
+# ==================================== Sympto Scan Setup ====================================
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 model = genai.GenerativeModel("gemini-pro")
 chat = model.start_chat()
 
 def get_gemini_response(question):
     response = chat.send_message(question)
+    # return response.choices[0].message["content"].split('\n')
     return response
 
 @app.route('/recommend', methods=['POST'])
@@ -190,6 +191,7 @@ def recommend():
         response = get_gemini_response(user_input)
         recommendations = [candidate.content.parts[0].text for candidate in response.candidates]
         return jsonify({'recommendations': recommendations})
+        
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
