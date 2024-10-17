@@ -17,7 +17,6 @@ CORS(app)
 
 # ==================================== MongoDB Setup ====================================
 
-client = MongoClient('mongodb+srv://patelsmit090305:smit090305@healthvitals-ai-clustor.7dlb7.mongodb.net/?retryWrites=true&w=majority&appName=HealthVitals-AI-CLUSTOR')
 client = MongoClient(os.getenv("MONGO_DB_URL"))
 db = client['adminPanel']  #
 collection = db['switchStates']  
