@@ -180,9 +180,9 @@ def recommend():
             data.get('Calory_range'),
         ]
 
-        user_input = (f"I want you to recommend Indian meals as 5 breakfasts, 5 lunches, 5 dinners, Exercise Plan, "
-                      f"the possible diseases that I might suffer from, some preventive measures for those diseases, "
-                      f"Medicines Recommendations if any, and important suggestions according to 5 do's and 5 don'ts based "
+        user_input = (f"I want you to recommend Indian meals as 5 breakfasts, 5 lunches, 5 dinners, Exercise Plan,(dont give title indian meal recommendations) "
+                      f"the possible diseases that I might suffer from, some preventive measures for those diseases, (dont give it with '*' symbol but give '\n', only for this line) "
+                      f"Medicines Recommendations if any, and important suggestions according to 5 do's and 5 don'ts based (dont give it with '*' symbol, only for this line and keep all same as before )"
                       f"on the following criteria: the age is {features[0]}, the gender is {features[1]}, "
                       f"the height is {features[2]}, the weight is {features[3]}, the previous disease is {features[4]}, "
                       f"the diet is {features[5]}, the allergies are {features[6]}, the symptoms are {features[7]}, "

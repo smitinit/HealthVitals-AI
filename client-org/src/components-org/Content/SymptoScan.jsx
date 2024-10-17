@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { SwitchMug } from "../../context/dataContext";
 import { useKindeAuth } from "@kinde-oss/kinde-auth-react";
 function SymptoScan() {
@@ -7,21 +7,6 @@ function SymptoScan() {
   if (!isLoading) {
     isAdmin = getPermission("admin-watch").isGranted;
   }
-  const TotalCredits = null;
-
-  TotalCredits =
-    parseInt(localStorage.getItem("MainCredits_Sympto")) === 0
-      ? 0
-      : parseInt(localStorage.getItem("MainCredits_Sympto"));
-  // if (TotalCredits === 0) {
-  //   TotalCredits = 0;
-  // } else {
-  //   localStorage.setItem("MainCredits_Sympto", TotalCredits);
-  // }
-  // console.log(TotalCredits);
-
-  const [credit, setCredit] = useState(TotalCredits);
-  // console.log(credit);
 
   const { mealSwt } = SwitchMug();
   const [formData, setFormData] = useState({
@@ -52,14 +37,6 @@ function SymptoScan() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (credit <= 0) {
-      return alert(
-        "Sorry, you have reached your credit limit. Please Upgrade to PRO version."
-      );
-    } else {
-      setCredit(credit - 1);
-      localStorage.setItem("MainCredits_Sympto", credit - 1);
-    }
     setError("");
     setRecommendations([]);
     setLoading(true);
@@ -77,12 +54,10 @@ function SymptoScan() {
         throw new Error("An error occurred while fetching recommendations.");
       }
       const data = await response.json();
+      console.log(data);
       if (data.error) {
         setError(data.error);
       } else {
-        // cleanText = data.recommendations.replace(/[*#]/g, "");
-        console.log(data.recommendations);
-
         setRecommendations(data.recommendations);
       }
     } catch (error) {
@@ -120,7 +95,7 @@ function SymptoScan() {
     });
     setRecommendations([]);
   };
-
+  let ctr = 0;
   return (
     <div className=" mx-auto w-full ">
       <div className="flex flex-col w-full justify-between gap-2 ">
@@ -128,9 +103,6 @@ function SymptoScan() {
           <h1 className="text-3xl font-bold text-slate-700 underline">
             SymptoScan
           </h1>
-          <span className="text-sm lg:text-lg font-bold px-2 py-1 shadow-md rounded-lg text-red-500 border-[1px]">
-            Your Credits Left: {credit}
-          </span>
         </div>
         <span className="text-slate-600 mt-3">
           SymptoScan is designed to analyze your health profile and symptoms. By
@@ -209,7 +181,7 @@ function SymptoScan() {
             </div>
           ))}
         </div>
-        {mealSwt && (
+        {mealSwt && !loading && (
           <button
             type="submit"
             className="bg-black text-white p-2 hover:bg-slate-200 rounded w-fit"
@@ -217,18 +189,41 @@ function SymptoScan() {
             {recommendations.length > 0 ? "Predict Again" : "Predict"}
           </button>
         )}
-        {/* {!mealSwt && <p className="text-red-500 text-lg">Maintainence Mode</p>} */}
-        <div className="w-full flex flex-col items-center gap-5 mt-5">
+        {error && <p>Error: {error}</p>}
+
+        <div className="w-full p-5 mt-5 text-xl">
           {loading ? (
-            <div className="">
-              {/* <Loading child={"Predicting..."} /> */}
-              Predicting...
-            </div>
+            <div className="">Predicting...</div>
           ) : (
             recommendations && (
               <>
                 <div className="font-semibold text-slate-600">
-                  <>{recommendations}</>
+                  <>
+                    {recommendations[0]
+                      ?.replace(" ", "")
+                      .split("\n")
+                      .map((sen) => {
+                        return (
+                          <>
+                            <p key={ctr++}>
+                              {sen.includes("**") ? (
+                                <strong className="text-2xl">
+                                  <u>{sen.replaceAll("*", "")}</u>
+                                </strong>
+                              ) : (
+                                <span>
+                                  {sen.replaceAll("*", "")}
+                                  {sen !== "" && "."}
+                                </span>
+                              )}
+                              <br />
+                            </p>
+                          </>
+                        );
+                      })}
+                    <br />
+                    <br />
+                  </>
                 </div>
               </>
             )
