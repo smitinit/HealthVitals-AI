@@ -1,6 +1,6 @@
 ﻿# HealthVitals-AI
  
  # pratham
- # smit
+ ## Smit patel
  # bibek
  # Harshil Patel
