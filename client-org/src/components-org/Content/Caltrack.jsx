@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 // import Loading from "../Utils/Loading";
 
 import { SwitchMug } from "../../context/dataContext";
