@@ -133,7 +133,7 @@ and calculate the approximate total calories of all food items in the image at l
 
  It contains - provice nutrition of Item in single line 
  
-At last also provide if the food is healthy or not. (start from new line and and provide reason why it is healthy or not)
+At last also provide if the food is healthy or not. (start from new line and and provide reason why it is healthy or not)
 """
 
 @app.route("/api/nutritions", methods=["POST"]) 
