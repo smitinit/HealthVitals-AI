@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 import { blogData } from "../../Data/blogData";
-import image from "../../assets/Images/no-image-blog.jpg";
+
 const initialState = {
   open: {},
 };
@@ -34,28 +34,32 @@ const Blogs = () => {
   };
 
   return (
-    <div className="w-full h-[calc(100vh-120px)] overflow-y-scroll select-none">
+    <div className="w-full h-[calc(100vh-120px)] overflow-y-scroll select-none bg-gray-100">
       <div className="w-full flex flex-col items-center my-5 gap-10 h-fit">
         {BlogData.map((blog, i) => {
           const isOpen = state.open[blog.id] || false;
 
           return (
-            <div className="w-full flex flex-col items-center gap-2">
+            <div key={i} className="w-full flex flex-col items-center gap-4">
               <section
                 onClick={() => toggleBlog(blog)}
                 key={i}
-                className={
+                className={`w-[90%] lg:w-[65%] bg-white shadow-lg rounded-lg p-6 transform duration-300 ease-in-out cursor-pointer ${
                   isOpen
-                    ? "w-[90%]  bg-slate-50 overflow-hidden text-ellipsis justify-center flex flex-col items-center h-fit  p-6 shadow-lg rounded-lg ease-in-out duration-700 cursor-pointer "
-                    : "w-[90%] lg:w-[65%] overflow-hidden text-ellipsis lg:h-[50vh] h-[30vh]  duration-300 bg-slate-50 p-6 shadow-lg rounded-lg ease-in cursor-pointer"
-                }
+                    ? "max-h-full scale-105"
+                    : "max-h-[6rem] overflow-hidden"
+                }`}
               >
-                <p className="text-3xl mb-6">{blog.title}</p>
-                <div className="w-full h-full flex gap-5 flex-col lg:flex-row ">
-                  <div>
-                    <p className="text-xl ">{blog.content}</p>
+                <p className="text-3xl mb-4 font-semibold text-gray-800">
+                  {blog.title}
+                </p>
+                {isOpen && (
+                  <div className="w-full flex flex-col lg:flex-row gap-6">
+                    <div>
+                      <p className="text-xl text-gray-600">{blog.content}</p>
+                    </div>
                   </div>
-                </div>
+                )}
               </section>
             </div>
           );
