@@ -1,9 +1,0 @@
-{
-    "version": 2,
-    "builds": [
-        {"src": "Server.org.py", "use": "@vercel/python"}
-    ],
-    "routes": [
-        {"src": "/(.*)", "dest": "Server.org.py"}
-    ]
-}
