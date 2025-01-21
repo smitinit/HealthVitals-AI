@@ -154,7 +154,7 @@ def get_nutrition_data():
 
 # ==================================== Sympto Scan Setup ====================================
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-model = genai.GenerativeModel("gemini-pro")
+model = genai.GenerativeModel("gemini-1.5-flash")
 chat = model.start_chat()
 
 def get_gemini_response(question):
